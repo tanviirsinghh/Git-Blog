@@ -57,9 +57,11 @@ userRoute.post("/signup", async (c) => {
       // which we are using here to sign
       const token = await sign({ id: user.id }, c.env.JWT_SECRET);
       // after signing the JWT will return us a token that we are returning
+      console.log(token)
       return c.json({
         token
       });
+      
     } catch (e) {}
     c.status(403);
     return c.json({

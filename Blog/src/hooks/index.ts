@@ -48,6 +48,7 @@ export const useBlogs= ()=>{
             }
         })
             .then(response => {
+                console.log(localStorage.getItem("token"))
               setBlogs(response.data.posts)
               setLoading(false)
             })
