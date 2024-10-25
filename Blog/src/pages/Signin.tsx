@@ -1,22 +1,25 @@
-import { Quote } from '../components/Quote';
-import { Auth } from '../components/Auth';
+// import { cn } from "@/./lib/utils";
+import {Auth} from '../components/Auth';
 
+export default function Signin() {
+  return (
+    <div className="relative flex size-full items-center justify-center overflow-hidden rounded-lg border bg-background h-screen md:shadow-xl">
+    
+      {/* Grid Pattern Component */}
+     
 
-function Signin() {
-    return(
-        <>
-        <div className="grid grid-cols-1 lg:grid-cols-2">
-            <div>
-                <Auth type='signin'/>
-            </div>
-            <div className="hidden lg:block">
-           <Quote/>
-           </div>
-        </div>
-   
-         </>
-    )
+      {/* Signin Component */}
+      <div className="z-10 mt-8">
+      <div className="">
 
+<div>
+    <Auth type='signin'/>
+</div>
+<div className="hidden lg:block">
+{/* <Quote/> */}
+</div>
+</div> {/* Ensure Signin has necessary classes */}
+      </div>
+    </div>
+  );
 }
-
-export default Signin

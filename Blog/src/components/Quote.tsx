@@ -5,7 +5,7 @@ export const Quote = () =>{
            <div className="flex justify-center">
             <div className="max-w-lg">
                 <div className="text-3xl font-bold">
-                    "THE BLOGS YOU DON'T NEED, BUT THE BLOGS YOU DESERVE"
+                  BLOGS
                 </div>
                 <div className="max-w-md text-xl font-semibold text-left mt-4">
                     Ustaad Lok

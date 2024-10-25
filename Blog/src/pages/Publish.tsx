@@ -5,9 +5,13 @@ import { useNavigate } from "react-router-dom";
 import { ChangeEvent, useState } from "react";
 
 export const Publish = () => {
+    const navigate = useNavigate()
+    if(!localStorage.getItem("token")){
+         navigate('/signin')
+    }
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const navigate = useNavigate();
+    
 
     return <div>
         <Appbar />

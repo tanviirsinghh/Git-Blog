@@ -1,18 +1,26 @@
-import { Quote } from '../components/Quote';
-import { Auth } from '../components/Auth';
+
+import {Auth} from '../components/Auth';
 
 
 function Signup() {
     return(
         <>
-        <div className="grid grid-cols-2">
-            <div>
-                <Auth type='signup'/>
+        
+    <div className="relative flex size-full items-center justify-center overflow-hidden rounded-lg border bg-background h-screen md:shadow-xl">
+
+
+      {/* Signin Component */}
+      <div className="">
+            <div className=''>
+                <Auth type='signup' />
             </div>
             <div className="hidden lg:block">
-           <Quote/>
+       
            </div>
         </div>
+    </div>
+  
+       
    
          </>
     )

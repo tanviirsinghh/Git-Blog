@@ -1,6 +1,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { BACKEND_URL } from "../config";
+import { useNavigate } from "react-router-dom";
 
  export interface Blog{
     "content":string,
@@ -13,6 +14,10 @@ import { BACKEND_URL } from "../config";
 }
 
 export const useBlog = ({ id }: { id: string }) => {
+    const navigate = useNavigate()
+    if(!localStorage.getItem("token")){
+         navigate('/signin')
+    }
     const [loading, setLoading] = useState(true);
     const [blog, setBlog] = useState<Blog>();
 

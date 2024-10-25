@@ -15,6 +15,8 @@ export const Auth =({type}: {type:"signup" | "signin"}) =>{
 
   async function sendRequest(){
     try{
+        console.log("enter the post frontend")
+        console.log("inputs from the frontend"+ inputs)
       const response =  await axios.post(`${BACKEND_URL}/api/v1/user/${type=== "signup"? "signup" : "signin"}`, inputs)
       console.log(response.data)
         const token = response.data.token
@@ -31,10 +33,11 @@ export const Auth =({type}: {type:"signup" | "signin"}) =>{
 }
     return(
     
-    <div className="h-screen flex justify-center flex-col">
+    <div className=" h-screen flex justify-center flex-col">
         <div className="flex justify-center">
             <div>
             <div className="px-10">
+
             <div className="text-3xl font-extrabold">
                 Create an account
             </div>
