@@ -49,8 +49,8 @@ export default function LowerSidebar() {
 
   return (
     
-
-            <Card>
+    <div className=' flex justify-center w-[26rem] '>
+            <Card>  
               <CardHeader>
                 <CardTitle>Recommended topics</CardTitle>
               </CardHeader>
@@ -65,6 +65,7 @@ export default function LowerSidebar() {
                 <Button variant="link" className="mt-4 p-0">See more topics</Button>
               </CardContent>
             </Card>
+            </div>
           
   )
 }
