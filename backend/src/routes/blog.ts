@@ -47,15 +47,19 @@ blogRoute.use('/*', async (c, next) => {
     })
   }
 })
+
+
 blogRoute.post('/', async c => {
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL
   }).$extends(withAccelerate())
+
+  console.log('entered backend')
+
   const authorId = c.get('userId')
   const body = await c.req.json()
-
-  const { success } = createBlogInput.safeParse(body)
   console.log(body)
+  const { success } = createBlogInput.safeParse(body)
   console.log(success)
   if (!success) {
     c.status(411)
@@ -63,18 +67,37 @@ blogRoute.post('/', async c => {
       message: 'Input not correct'
     })
   }
-
+ 
+  // sending the img to the cloudinary
+  // const img = body.img;
+  // const imgUpload = sendImg(img);
+  // console.log("here is the body.url " + body.url)
+console.log("try block of create blog")
+try{
   const post = await prisma.post.create({
     data: {
       title: body.title,
       content: body.content,
-      authorId: authorId
+      url: body.url,
+      authorId: authorId,
+     
     }
   })
   return c.json({
     id: post.id
   })
+}catch(e){
+  c.status(500)
+ return c.json({
+  msg: "Internal Server Error"
+ })
+
+
+}
+
+
 })
+
 blogRoute.put('/', async c => {
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL
@@ -109,6 +132,7 @@ blogRoute.get('/bulk', async c => {
     datasourceUrl: c.env.DATABASE_URL
   }).$extends(withAccelerate())
 
+  try{
   const posts = await prisma.post.findMany({
     select: {
       content: true,
@@ -124,6 +148,13 @@ blogRoute.get('/bulk', async c => {
   return c.json({
     posts
   })
+}
+catch(e){
+  c.status(411)
+  return c.json({
+    message: 'Error while fetching blogs'
+  })
+}
 })
 
 blogRoute.get('/:id', async c => {
@@ -140,6 +171,7 @@ blogRoute.get('/:id', async c => {
         id: true,
         title: true,
         content: true,
+        url:true,
         author: {
           select: {
             name: true
