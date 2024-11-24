@@ -1,10 +1,13 @@
 import { z } from 'zod';
 
-
+//  use tsc -b to build the file 
+// it will build the index.js in dist folder
+// and then i will automatically update the index.js
 export const signupInput = z.object({
     email:z.string().email(),
     password:z.string().min(6),
-    name:z.string().optional()
+    name:z.string().optional(),
+    blogName: z.string().optional()
 })
 export const signinInput = z.object({
     email:z.string().email(),
