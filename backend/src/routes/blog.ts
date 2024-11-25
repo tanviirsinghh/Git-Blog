@@ -138,6 +138,7 @@ blogRoute.get('/bulk', async c => {
       content: true,
       title: true,
       id: true,
+      url:true,
       author: {
         select: {
           name: true

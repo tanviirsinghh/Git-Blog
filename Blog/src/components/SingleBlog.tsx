@@ -76,6 +76,7 @@ export default function SingleBlog ({
   title,
   content,
   publishDate
+
 }: BlogPost) {
   // const [savedPosts, setSavedPosts] = React.useState<Set<number>>(new Set())
 
@@ -96,6 +97,7 @@ export default function SingleBlog ({
       {/* <main className="container h-full w-[46rem]  bg-yellow-700 ">
         // <div className=" w-full bg-slate-700 lg:flex-row "> */}
       <div className='w-[50rem]  h-full m-2 '>
+        
         <Card key={id} className='border w-full   '>
           <CardContent className='p-8  '>
             <div className='flex items-start space-x-4'>
@@ -143,7 +145,7 @@ export default function SingleBlog ({
                           > */}
                     {/* <Bookmark className="h-4 w-4 mr-1" />
                             {savedPosts.has(index) ? "Saved" : "Save"}
-                          </Button> */}
+                          </aButton> */}
                     <Button variant='ghost' size='sm' className='text-gray-500'>
                       <MoreHorizontal className='h-4 w-4' />
                     </Button>
