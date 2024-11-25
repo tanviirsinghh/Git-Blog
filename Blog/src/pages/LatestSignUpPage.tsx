@@ -1,18 +1,22 @@
 import  { FormEvent, useState } from 'react';
+import { Link } from 'react-router-dom';
  
-const ExcitingBlogSignup = () => {
+const LatestSignupPage = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     // blogName: '', 
     blogCategory: '',
+    profilepicture:""
   });
+  // storing the img here
   const [image, setImage] = useState<File | null>(null);
+  // storing the temporary url here to show on frontend when user select the picture
   const [imagePreview, setImagePreview] = useState<string | " ">(" ");
 
     const handleChange = (e : React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-      const { name, value } = e.target;
+      const { name, value } = e.target; // name here is the input changed and value here is the new value that got inserted
       setFormData(prevData => ({
         ...prevData,
         [name]: value
@@ -44,8 +48,8 @@ const ExcitingBlogSignup = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-amber-50 p-4">
-      <div className="bg-white rounded-md shadow-2xl w-full max-w-4xl flex flex-col md:flex-row overflow-hidden">
-        <div className="w-full md:w-1/2 p-8 border-4 border-black bg-yellow-50">
+      <div className="bg-amber-50 rounded-md shadow-2xl w-full max-w-4xl flex flex-col md:flex-row overflow-hidden">
+        <div className="w-full md:w-1/2 p-8 border-4 border-black bg-amber-50">
           <h2 className="text-4xl font-bold mb-6 text-black text-center">Unleash Your Creativity!</h2>
           <div className="">
             <img src="src/imgs/modern-blogger-concept-with-flat-design_23-2147996703.jpg" alt="Blog " className="rounded-lg shadow-lg mb-6" />
@@ -73,7 +77,7 @@ const ExcitingBlogSignup = () => {
             </span>
           </div>
         </div>
-        <div className="w-full md:w-1/2 p-8 border-4  border-black">
+        <div className="w-full md:w-1/2 p-8 border-4 bg-amber-50  border-black">
           <h3 className="text-3xl font-bold mb-6 text-black text-center">Sign Up Now!</h3>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex flex-col items-center mb-4">
@@ -144,23 +148,33 @@ const ExcitingBlogSignup = () => {
               <option value="fashion">Style Spectrum</option>
               <option value="other">Unique Perspectives</option>
             </select>
-            <button
+            {/* <button
               type="submit"
               className="w-full bg-black text-white font-bold py-3 px-4 rounded-full hover:from-purple-600 hover:to-indigo-600 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
             >
               Launch My Blogging Journey! 🚀
-            </button>
+            </button> */}
+            <button
+                type="submit"
+                className="w-full bg-black text-yellow-50 font-bold py-3 px-4 rounded-full hover:bg-yellow-500 hover:text-black transition-all duration-300 transform hover:scale-95 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50"
+              >
+                Launch My Blogging Journey! 🚀
+              </button>
           </form>
           <p className="mt-6 text-sm text-gray-600 text-center">
             By signing up, you're joining an epic community of creators!
           </p>
+          <Link to="/newsignin">
+            <p className="mt-6 text-sm text-black text-center">
+              Already have an Account <h5 className="font-semibold underline hover:text-yellow-600"> Sign In here</h5>
+            </p></Link>
         </div>
       </div>
     </div>
   );
 };
 
-export default ExcitingBlogSignup;
+export default LatestSignupPage;
 
 
 
