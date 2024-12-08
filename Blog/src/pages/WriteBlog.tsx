@@ -2,12 +2,15 @@ import { useRef, useState } from 'react'
 import { Editor as TinyMCEEditor } from 'tinymce'
 import { Editor } from '@tinymce/tinymce-react'
 import axios from 'axios'
-import { BACKEND_URL, CLOUDINARY_URL } from '../config'
+import { BACKEND_URL } from '../config'
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import { toast } from 'react-toastify'
 import ImageUpload from '../components/ImageUpload'
+import ImageUploadHook from '../hooks/ImageUploadHook'
 
+
+//  we are using this
 export default function TextEditor () {
   const editorRef = useRef<TinyMCEEditor | null>(null)
   const navigate = useNavigate()
@@ -29,35 +32,47 @@ export default function TextEditor () {
 
     // Append if file is not null
 
-    if (img) {
-      console.log(' image selected')
-
-      const data = new FormData()
-      data.append('file', img)
-      data.append('upload_preset', 'Blog-Project')
-      data.append('cloud_name', 'dktr9buob')
-      console.log('start request')
-      try {
-        const response = await axios.post(`${CLOUDINARY_URL}`, data, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        })
-        console.log(response.data.secure_url)
-        console.log('complete')
-        const imgUrl = response.data.secure_url
-        // setUrl(imgUrl)
-
-        await sendData(imgUrl)
-      } catch (e) {
-        toast.error('Error Occurred / Please Re-Upload')
-        return Response.json({
-          msg: "Image didn't upload"
-        })
+    try {
+      const imgUrl = img ? await ImageUploadHook(img) : '';
+      if (!imgUrl && img) {
+        // If image is present but upload failed
+        toast.error('Image upload failed. Cannot proceed.');
+        return;
       }
-    } else {
-      await sendData('')
+      await sendData(imgUrl || ''); // Handle empty URLs gracefully
+    } catch (error) {
+      console.error('Error in handleSubmit:', error);
+      toast.error('An unexpected error occurred. Please try again.');
     }
+    // if (img) {
+    //   console.log(' image selected')
+
+    //   const data = new FormData()
+    //   data.append('file', img)
+    //   data.append('upload_preset', 'Blog-Project')
+    //   data.append('cloud_name', 'dktr9buob')
+    //   console.log('start request')
+    //   try {
+    //     const response = await axios.post(`${CLOUDINARY_URL}`, data, {
+    //       headers: {
+    //         'Content-Type': 'multipart/form-data'
+    //       }
+    //     })
+    //     console.log(response.data.secure_url)
+    //     console.log('complete')
+    //     const imgUrl = response.data.secure_url
+    //     // setUrl(imgUrl)
+
+    //     await sendData(imgUrl)
+    //   } catch (e) {
+    //     toast.error('Error Occurred / Please Re-Upload')
+    //     return Response.json({
+    //       msg: "Image didn't upload"
+    //     })
+    //   }
+    // } else {
+    //   await sendData('')
+    // }
   }
   const sendData = async (imgUrl: string) => {
     try {
@@ -98,18 +113,18 @@ export default function TextEditor () {
   //     if (editorRef.current) {
   //       console.log(editorRef.current.getContent());
   //     }
-  //   };
+  //   };rre
 
   return (
     <div className='h-screen w-full  flex-col justify-center items-center'>
       <Navbar />
-      <div className='w-full h-44 bg-pink-700 flex justify-center items-end'>
-        <div className='bg-violet-500 w-2/4 flex justify-center items-center'>
+      <div className='w-full h-44  flex justify-center  '>
+        {/* <div className='bg-violet-500 w-2/4 h-full flex justify-center items-center'> */}
           <ImageUpload getImgFile={getImgFile} />
-        </div>
+        {/* </div> */}
       </div>
-      <div className='flex bg-green-900  justify-center items-center h-32 w-full  '>
-        <div className=' bg-yellow-500 max-w-screen-lg h-16 w-2/3 flex'>
+      <div className='flex   justify-center items-center h-32 w-full  '>
+        <div className='  max-w-screen-lg h-16 w-2/3 flex'>
           <input
             onChange={e => {
               setTitle(e.target.value)
@@ -120,7 +135,7 @@ export default function TextEditor () {
           />
         </div>
       </div>
-      <div className=' bg-blue-900 flex justify-center items-center h-3/ w-full '>
+      <div className='  flex justify-center items-center h-3/ w-full '>
         <Editor
           apiKey='s73wk7i6fwr11ew23vudqfd79tjyajof2inq6b6qg8a9c9x6
 '

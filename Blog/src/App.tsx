@@ -7,8 +7,11 @@ import Loading from './components/Loading'
 import NewSingleBlog from './components/NewSingleBlog'
 import LatestSignupPage from './pages/LatestSignUpPage'
 import LatestSignin from './components/LatestSignin'
+import UserProfileBolt from './components/Bolt-user-profile/UserProfileBolt'
+import BoltSignup from './components/Bolt-user-profile/BoltSignin'
+import BoltSignin from './components/Bolt-user-profile/BoltSignin'
 // Implementing lazy loading
-const Signup = React.lazy(() => import('./pages/Signup'))
+// const Signup = React.lazy(() => import('./pages/Signup'))
 const Signin = React.lazy(() => import('./pages/Signin'))
 const Blogs = React.lazy(() => import('./pages/Blogs'))
 const Blog = React.lazy(() => import('./pages/Blog'))
@@ -28,7 +31,23 @@ function App () {
             path='/signup'
             element={
               <React.Suspense fallback={<Loading />}>
-                <Signup />
+                <LatestSignupPage />
+              </React.Suspense>
+            }
+          ></Route>
+          <Route
+            path='/boltsignin'
+            element={
+              <React.Suspense fallback={<Loading />}>
+                <BoltSignin />
+              </React.Suspense>
+            }
+          ></Route>
+          <Route
+            path='/userprofilebolt'
+            element={
+              <React.Suspense fallback={<Loading />}>
+                <UserProfileBolt />
               </React.Suspense>
             }
           ></Route>
@@ -85,7 +104,6 @@ function App () {
               </React.Suspense>
             }
           ></Route>
-          <Route path='/newsignup' element={<LatestSignupPage/>}></Route>
           <Route path='/newsignin' element={<LatestSignin/>}></Route>
 
         </Routes>

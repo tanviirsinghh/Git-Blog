@@ -1,26 +1,22 @@
-import { Hono } from "hono";
-import { Prisma, PrismaClient } from "@prisma/client/edge";
-import { withAccelerate } from "@prisma/extension-accelerate";
-import { jwt, sign, verify } from "hono/jwt";
-import { X_HONO_DISABLE_SSG_HEADER_KEY } from "hono/ssg"; 
-import { string, z } from "zod";
-import { signinInput, signupInput } from "@tanviirsinghh/medium-common";
-import { sendOtp } from "../services/mail";
-import { totp } from "otplib";
+import { Hono } from 'hono'
+import { Prisma, PrismaClient } from '@prisma/client/edge'
+import { withAccelerate } from '@prisma/extension-accelerate'
+import { jwt, sign, verify } from 'hono/jwt'
+import { X_HONO_DISABLE_SSG_HEADER_KEY } from 'hono/ssg'
+import { object, string, z } from 'zod'
+import { signinInput, signupInput } from '@tanviirsinghh/medium-common'
+import { User } from '../../../Blog/src/hooks/index';
 
 export const userRoute = new Hono<{
-    Bindings: {
-      DATABASE_URL: string;
-      JWT_SECRET: string;
-      OTP_SECRET:string
-      API_KEY:string
-   
-     
-    };
-  }>();
-  
-  const OTPSECRET="fuckyoubitchgotohell"
-  // To restrict a middleware to certain routes, you can use the following -
+  Bindings: {
+    DATABASE_URL: string
+    JWT_SECRET: string
+    OTP_SECRET: string
+    API_KEY: string
+  }
+}>()
+
+// To restrict a middleware to certain routes, you can use the following -
 
 // app.use('/message/*', async (c, next) => {
 //   await next()
@@ -37,137 +33,285 @@ export const userRoute = new Hono<{
 // So we can add a top level middleware
 // Routes
 
-userRoute.post("/signup", async (c) => {
-    const prisma = new PrismaClient({
-      datasourceUrl: c.env.DATABASE_URL,
-    }).$extends(withAccelerate());
+userRoute.post('/signup', async c => {
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL
+  }).$extends(withAccelerate())
 
-    // const otptoken = totp.generate(OTPSECRET)
-    // console.log(otptoken)
+  console.log('otp check here')
 
-    // const otp = (OTPSECRET);
-    console.log("otp check here")
- 
-    
-    const apikey = c.env.API_KEY
-   const secret = c.env.OTP_SECRET
-  console.log("request entered backend")
+  const apikey = c.env.API_KEY
+  const secret = c.env.OTP_SECRET
+  console.log('request entered backend')
 
-    const body = await c.req.json();
+  const body = await c.req.json()
 
-    console.log(body)
-    console.log("after body")
+  console.log(body)
+  console.log('after body')
 
-    const {success} = signupInput.safeParse(body)
+  const { success } = signupInput.safeParse(body)
 
-    if(!success){
-      c.status(411)
-      return c.json({
-        message:"Input not correct"
-      })
-    }
-
-    console.log("create databse")
-    const emailCheck = await prisma.user.findUnique({
-      where:{
-          email:body.email
-      }
-      
+  if (!success) {
+    c.status(411)
+    return c.json({
+      message: 'Input not correct'
     })
-    console.log("fuck")
-    if(emailCheck){
-      c.status(403);
-      return c.json({
-        error:"Email Already in Use"
-      })
-    }
-    console.log("fuck")
-    
+  }
 
-    try {
-      
-    //  console.log("before otp function" + otp)
-    //  const responce =  await sendOtp({email, otp, apikey});
-  //  const otp = '1234'
-      const user = await prisma.user.create({
-        data: {
-          name: body.name,
-          email: body.email,
-          password: body.password,
-          // otp:"1234",
-          // isVerified:false,
-          
-        }
-     });
-     console.log("temporary user created successfully")
-    //  console.log('otp sent')
-    //  const email = body.email;
+  console.log('create databse')
+  const emailCheck = await prisma.user.findUnique({
+    where: {
+      email: body.email
+    }
+  })
+  console.log('fuck')
+  if (emailCheck) {
+    c.status(403)
+    return c.json({
+      error: 'Email Already in Use'
+    })
+  }
+  console.log('fuck')
+
+  try {
+    const user = await prisma.user.create({
+      data: {
+        name: body.name,
+        email: body.email,
+        password: body.password,
+        blogName: body.blogName,
+        profilePicture: body.profilePicture,
+        bio:body.bio,
+        location:body.location,
+      }
+    })
+    console.log('temporary user created successfully')
 
     //  const otpResponse = await sendOtp({apikey, otp , email})
-    //  console.log("this is otp function respone after completion " + otpResponse)
-    //  aft
-      // After creating the user, its returns us the user's id
-      // which we are using here to sign
-      const token = await sign({ id: user.id }, c.env.JWT_SECRET);
-      // after signing the JWT will return us a token that we are returning
-      console.log("jwt token " + token)
-      return c.json({
-        token
-      });
-      
-    } 
-  catch (e) {
-
+    // After creating the user, its returns us the user's id
+    // which we are using here to sign
+    const token = await sign({ id: user.id }, c.env.JWT_SECRET)
+    // after signing the JWT will return us a token that we are returning
+    console.log('jwt token ' + token)
+    return c.json({
+      token
+    })
+  } catch (e) {
     c.status(500)
     return c.json({
-      error: "Error while signing up",
-    });
+      error: 'Error while signing up'
+    })
   }
-  });
+})
 
+userRoute.post('/signin', async c => {
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL
+  }).$extends(withAccelerate())
 
-  userRoute.post("/signin", async (c) => {
-    const prisma = new PrismaClient({
-      datasourceUrl: c.env.DATABASE_URL,
-    }).$extends(withAccelerate());
-  
-    const body = await c.req.json();
-    const {success} = signinInput.safeParse(body)
-    if(!success){
-      c.status(411)
-      return c.json({
-        message:"Input not correct"
-      })
-    }
-  try{
+  const body = await c.req.json()
+  const { success } = signinInput.safeParse(body)
+  if (!success) {
+    c.status(411)
+    return c.json({
+      message: 'Input not correct'
+    })
+  }
+  try {
     const user = await prisma.user.findUnique({
       where: {
         email: body.email,
-        password: body.password,
-      },
-    });
+        password: body.password
+      }
+    })
     if (!user) {
-      c.status(401);
-      return c.json({
-        error: "user not found / Incorrect creds",
-      });
+      c.status(401)
+      return c.text('user not found / Incorrect creds' )
     }
-    const jwt = await sign({ id: user.id }, c.env.JWT_SECRET);
+    const jwt = await sign({ id: user.id }, c.env.JWT_SECRET)
     console.log('chalda')
-     console.log(
-"here is the returning token" + jwt
-     )
-    return c.text(
-
-      jwt); 
-
-    } catch (e) {
-
+    console.log('here is the returning token' + jwt)
+    return c.json({
+      token : jwt
+    })
+  } catch (e) {
     c.status(500)
 
-    return c.text("Please try again")
+    return c.text('Please try again')
+  }
+})
+
+userRoute.get('/details', async c => {
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL
+  }).$extends(withAccelerate())
+
+  const authHeader = c.req.header('Authorization') // Get Authorization header
+  if (!authHeader) {
+    c.status(401)
+    return c.text('Token not available')
+  }
+
+  // Remove 'Bearer ' prefix if present
+  const token = authHeader.replace('Bearer ', '')
+
+  let decode: { id: string } | null = null
+  try {
+    decode = (await verify(token, c.env.JWT_SECRET)) as { id: string } // Decode the token
+    console.log('Token decoded successfully')
+  } catch (e) {
+    console.error('Token verification failed', e) // Log error for debugging
+    c.status(500)
+    return c.text('Token not verified')
+  }
+
+  const userId = decode?.id // Extract userId from the decoded token
+  if (!userId) {
+    c.status(400)
+    return c.text('Invalid token payload')
+  }
+
+  try {
+    console.log(`Fetching data for userId: ${userId}`)
+
+    // Fetch user data from the database
+    const userData = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        name: true,
+        email: true,
+        blogName: true,
+        profilePicture: true,
+        bio: true,
+        location: true,
+        coverpicture: true,
+      }
+    })
+
+    // Check if user exists
+    if (!userData) {
+      c.status(404)
+      return c.text('User not found')
     }
-  });
+
+    return c.json(userData) // Send user data as response
+  } catch (e) {
+    console.error('Database error:', e) // Log error for debugging
+    c.status(500)
+    return c.text('Error while fetching user details from the database')
+  }
+})
 
 
- 
+//  update the image 
+
+userRoute.put('/update-profile-picture', async c => {
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL
+  }).$extends(withAccelerate())
+   
+  const body = await c.req.json()
+  const token = c.req.header('authorization') 
+  if(!token){
+    c.status(401)
+    return c.text("Token not found")
+  }
+  
+  // const decode = await verify(token, c.env.JWT_SECRET)
+
+  const decode = await verify(token, c.env.JWT_SECRET) as { id: string | undefined };
+
+       if (!decode?.id) {
+  c.status(411);
+  return c.text('Token not verified or ID missing');
+} 
+  // if(!decode){
+  //   c.status(411)
+  //   return c.text('Token not verified')
+  // }
+  console.log(body.profilePicture)
+  try{
+    console.log("entered the try block")
+  const response = await prisma.user.update({
+    where:{
+    id:decode.id
+    },
+    data:{
+      profilePicture:body.profilePicture
+    }
+  })
+  return c.json( {
+    success:true,
+    user: response
+  })
+}
+catch(e){
+  c.status(500)
+  return c.json({
+    success: false,
+    message: 'Server / Database Error'
+  })
+}
+
+
+})
+
+userRoute.put('/update-user-info', async c => {
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL
+  }).$extends(withAccelerate())
+   console.log('backend')
+  const body = await c.req.json()
+  const token = c.req.header('authorization') 
+  if(!token){
+    c.status(401)
+    return c.text("Token not found")
+  }
+  
+  // const decode = await verify(token, c.env.JWT_SECRET)
+
+  const decode = await verify(token, c.env.JWT_SECRET) as { id: string | undefined };
+
+       if (!decode?.id) {
+  c.status(411);
+  return c.text('Token not verified or ID missing');
+} 
+  // if(!decode){
+  //   c.status(411)
+  //   return c.text('Token not verified')
+  // }
+  console.log(body)
+  console.log('backend object de uppper')
+  const updatedData: Record<string, string> ={}
+
+  if(body.name) updatedData.name = body.name;
+  if(body.email) updatedData.email = body.email;
+  if(body.blogName) updatedData.blogName = body.blogName;
+  
+if(Object.keys(updatedData).length === 0){
+  c.status(401);
+  return c.text('No Valid Fields to Update')
+}
+  try{
+    console.log("entered the try block")
+  const response = await prisma.user.update({
+    where:{
+    id:decode.id
+    },
+    data:updatedData
+  })
+  return c.json( {
+    success:true,
+    user: response
+  })
+}
+catch(e){
+  c.status(500)
+  return c.json({
+    success: false,
+    message: 'Server / Database Error'
+  })
+}
+
+
+})
