@@ -7,20 +7,29 @@ import Loading from './components/Loading'
 import NewSingleBlog from './components/NewSingleBlog'
 import LatestSignupPage from './pages/LatestSignUpPage'
 import LatestSignin from './components/LatestSignin'
-import UserProfileBolt from './components/Bolt-user-profile/UserProfileBolt'
-import BoltSignup from './components/Bolt-user-profile/BoltSignin'
+// import UserProfileBolt from './components/Bolt-user-profile/UserProfileBolt'
+// import BoltSignup from './components/Bolt-user-profile/BoltSignin'
 import BoltSignin from './components/Bolt-user-profile/BoltSignin'
+import AuthorProfile from './components/Bolt-user-profile/AuthorProfile'
+import BoltTextEditor from './components/Bolt-user-profile/BoltTextEditor'
+import BoltLandingPage from './pages/BoltLandingPage'
+import BoltMainPage from './pages/BoltMainPage'
+import BoltFullBlog from './components/Bolt-user-profile/BoltFullBlog'
+// import { useBlog } from './hooks'
+// import GithubCopilot from './components/GithubCopilot'
+import EditBlog from './components/EditBlog'
+// import userProfileBolt from './components/Bolt-user-profile/UserProfileBolt';
 // Implementing lazy loading
 // const Signup = React.lazy(() => import('./pages/Signup'))
 const Signin = React.lazy(() => import('./pages/Signin'))
-const Blogs = React.lazy(() => import('./pages/Blogs'))
+// const Blogs = React.lazy(() => import('./pages/Blogs'))
 const Blog = React.lazy(() => import('./pages/Blog'))
 const TextEditor = React.lazy(() => import('./pages/WriteBlog'))
-const UserProfile = React.lazy(() => import('./pages/UserProfile'))
+const UserProfileBolt = React.lazy(() => import('./components/Bolt-user-profile/UserProfileBolt'))
 
 function App () {
   const token = localStorage.getItem('token')
-
+      
   return (
     <>
       <ToastContainer />
@@ -43,14 +52,30 @@ function App () {
               </React.Suspense>
             }
           ></Route>
+           {/* <Route
+            path='/github'
+            element={
+              <React.Suspense fallback={<Loading />}>
+                <GithubCopilot />
+              </React.Suspense>
+            }
+          ></Route> */}
           <Route
+            path='/boltfullblog'
+            element={
+              <React.Suspense fallback={<Loading />}>
+                <BoltFullBlog  />
+              </React.Suspense>
+            }
+          ></Route>
+          {/* <Route
             path='/userprofilebolt'
             element={
               <React.Suspense fallback={<Loading />}>
                 <UserProfileBolt />
               </React.Suspense>
             }
-          ></Route>
+          ></Route> */}
           <Route
             path='/signin'
             element={
@@ -59,14 +84,14 @@ function App () {
               </React.Suspense>
             }
           ></Route>
-          <Route
+          {/* <Route
             path='/blogs'
             element={
               <React.Suspense fallback={<Loading />}>
                 <Blogs />
               </React.Suspense>
             }
-          ></Route>
+          ></Route> */}
           <Route
             path='/blog/:id'
             element={
@@ -86,7 +111,46 @@ function App () {
               </React.Suspense>
             }
           ></Route>
-
+<Route
+            path='/details'
+            element={
+              <React.Suspense fallback={<Loading />}>
+                <AuthorProfile />
+              </React.Suspense>
+            }
+          ></Route>
+          <Route
+            path='/bolttexteditor'
+            element={
+              <React.Suspense fallback={<Loading />}>
+                <BoltTextEditor />
+              </React.Suspense>
+            }
+          ></Route>
+         <Route
+            path='/editblog/:id'
+            element={
+              <React.Suspense fallback={<Loading />}>
+                <EditBlog />
+              </React.Suspense>
+            }
+          ></Route>
+          <Route
+            path='/'
+            element={
+              <React.Suspense fallback={<Loading />}>
+                <BoltLandingPage />
+              </React.Suspense>
+            }
+          ></Route>
+           <Route
+            path='/blogs'
+            element={
+              <React.Suspense fallback={<Loading />}>
+                <BoltMainPage />
+              </React.Suspense>
+            }
+          ></Route>
           <Route
             path='/publish'
             element={
@@ -97,10 +161,10 @@ function App () {
           ></Route>
 
           <Route
-            path='userprofile'
+            path='/userprofile'
             element={
               <React.Suspense fallback={<Loading />}>
-                {token ? <UserProfile /> : <Signin />}
+                {token ?  <UserProfileBolt />: <Signin />}
               </React.Suspense>
             }
           ></Route>

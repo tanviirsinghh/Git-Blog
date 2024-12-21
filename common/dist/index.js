@@ -2,11 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateBlogInput = exports.createBlogInput = exports.signinInput = exports.signupInput = void 0;
 const zod_1 = require("zod");
+//  use tsc -b to build the file 
+// it will build the index.js in dist folder
+// and then i will automatically update the index.js
 exports.signupInput = zod_1.z.object({
     email: zod_1.z.string().email(),
     password: zod_1.z.string().min(6),
     name: zod_1.z.string().optional(),
-    blogName: zod_1.z.string().optional()
+    blogName: zod_1.z.string().optional(),
+    profilePicture: zod_1.z.string().optional()
 });
 exports.signinInput = zod_1.z.object({
     email: zod_1.z.string().email(),
@@ -16,10 +20,12 @@ exports.signinInput = zod_1.z.object({
 exports.createBlogInput = zod_1.z.object({
     title: zod_1.z.string(),
     content: zod_1.z.string(),
-    url: zod_1.z.string().optional()
+    url: zod_1.z.string().optional(),
+    id: zod_1.z.string()
 });
 exports.updateBlogInput = zod_1.z.object({
     title: zod_1.z.string(),
     content: zod_1.z.string(),
-    id: zod_1.z.number()
+    id: zod_1.z.string(),
+    url: zod_1.z.string().url()
 });

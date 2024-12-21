@@ -2,7 +2,7 @@ import { Blog } from '../hooks/index'
 import { Avatar } from './BlogCard'
 import DOMPurify from 'dompurify'
 import { useNavigate } from 'react-router-dom'
-import Navbar from './Navbar'
+import Navbar from './Bolt-user-profile/Navbar'
 
 
 

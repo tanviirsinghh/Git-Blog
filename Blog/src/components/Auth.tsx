@@ -5,6 +5,7 @@ import axios from "axios";
 import { BACKEND_URL } from "../config";
 import { toast } from "react-toastify";
 
+
 export const Auth =({type}: {type:"signup" | "signin"}) =>{
     const navigate= useNavigate()
     const [inputs, setInputs] = useState<SignupInput>({
@@ -25,6 +26,7 @@ export const Auth =({type}: {type:"signup" | "signin"}) =>{
         localStorage.setItem("token", token)
         console.log(token)
             navigate('/blogs')
+            toast.success('Signup successfull')
 
 }catch (e : unknown ){
     if(axios.isAxiosError(e) && e.response?.status === 401){
@@ -35,9 +37,9 @@ export const Auth =({type}: {type:"signup" | "signin"}) =>{
 else if (axios.isAxiosError(e) && e.response?.status === 411){
     toast.error('Input Not Correct')
 }
-else if (axios.isAxiosError(e) && e.response?.status === 403){
-    toast.error('Email Already in use')
-}
+// else if (axios.isAxiosError(e) && e.response?.status === 403){
+//     toast.error('Email Already in use')
+// }
  }
 }
     return(

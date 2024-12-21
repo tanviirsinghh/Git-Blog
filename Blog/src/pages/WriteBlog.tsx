@@ -4,7 +4,7 @@ import { Editor } from '@tinymce/tinymce-react'
 import axios from 'axios'
 import { BACKEND_URL } from '../config'
 import { useNavigate } from 'react-router-dom'
-import Navbar from '../components/Navbar'
+import Navbar from '../components/Bolt-user-profile/Navbar'
 import { toast } from 'react-toastify'
 import ImageUpload from '../components/ImageUpload'
 import ImageUploadHook from '../hooks/ImageUploadHook'
@@ -14,7 +14,11 @@ import ImageUploadHook from '../hooks/ImageUploadHook'
 export default function TextEditor () {
   const editorRef = useRef<TinyMCEEditor | null>(null)
   const navigate = useNavigate()
-
+  const token = localStorage.getItem('token')
+  if(!token){
+    toast.info('Log In or Create Account First')
+     navigate('/publish')
+  }
   const [title, setTitle] = useState('')
   const [descript, setDescript] = useState('')
   const [img, setImg] = useState<File | null>(null)
@@ -118,7 +122,7 @@ export default function TextEditor () {
   return (
     <div className='h-screen w-full  flex-col justify-center items-center'>
       <Navbar />
-      <div className='w-full h-44  flex justify-center  '>
+      <div className='w-full h-44  flex justify-center mt-24  '>
         {/* <div className='bg-violet-500 w-2/4 h-full flex justify-center items-center'> */}
           <ImageUpload getImgFile={getImgFile} />
         {/* </div> */}

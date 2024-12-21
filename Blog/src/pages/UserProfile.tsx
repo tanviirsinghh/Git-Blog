@@ -1,7 +1,7 @@
 import ProfileInfo from '../components/UserProfile.tsx/ProfileInfo'
 import SavedBlogs from '../components/UserProfile.tsx/SavedBlogs'
 import MyActivities from '../components/UserProfile.tsx/MyActivities'
-import Navbar from '../components/Navbar'
+import Navbar from '../components/Bolt-user-profile/Navbar'
 // import NewLikeComments from '../components/UserProfile.tsx/NewLikeComment';
 import { useUserDetails } from '../hooks/index';
 import { useNavigate } from 'react-router-dom';
@@ -66,7 +66,6 @@ export default function UserProfile () {
   const navigate = useNavigate();
   // useParams will get all the data related to the parameter, it will provuserIde the params to us
   //  const userId = localStorage.getItem('userId')
-  //  console.log(userId)
    const {loading, userDetails,setUserDetails} = useUserDetails(
     // userId: userId || " "
    )
@@ -151,8 +150,8 @@ if(loading){
       {/* <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]"> */}
       
       <div className='h-[34rem] w-full  flex flex-col justify-center items-center'>
-        <div className='h-16 w-56  flex justify-center items-center '>
-          <h1 className='text-3xl font-bold font-sans  '>User Profile</h1>
+       <div className='h-16 w-56  flex justify-center items-center '>
+          <h1 className='text-3xl font-bold font-sans '>User Profile</h1>
         </div>
         <div className='h-3/4 w-3/4 flex justify-evenly items-center  '>
           <ProfileInfo

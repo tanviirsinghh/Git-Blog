@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Heart, MessageCircle, Bookmark } from 'lucide-react'
-import Navbar from '../components/Navbar'
+import Navbar from '../components/Bolt-user-profile/Navbar';
 import { useNavigate, useParams } from 'react-router-dom'
 import DOMPurify from 'dompurify'
 import { Blog } from '../hooks/index'
@@ -59,18 +59,6 @@ export default function NewFullBlog ({ blog }: { blog: Blog }) {
     fetchBookmarkStatus()
   }, [blog.id]) // Ensures check happens on blog change
 
-  const [user, setUser] = useState({
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    bio: 'Passionate writer and tech enthusiast. I love exploring new technologies and sharing my insights with the world.',
-    avatar: '/placeholder.svg?height=150&width=150',
-    socialLinks: {
-      twitter: 'https://twitter.com/johndoe',
-      linkedin: 'https://linkedin.com/in/johndoe',
-      github: 'https://github.com/johndoe'
-    }
-  })
-
   const [tempBlog, settempBlog] = useState({
     title: 'The Future of Artificial Intelligence in Web Development',
     description:
@@ -105,32 +93,7 @@ Join me on this exciting journey as we explore the cutting-edge advancements in 
     ]
   })
 
-  const [relatedtempBlogs, setRelatedtempBlogs] = useState([
-    {
-      id: 1,
-      title: 'Machine Learning in Frontend Development',
-      author: 'Jane Smith',
-      date: '2023-05-10',
-      readTime: '4 min read',
-      image: '/placeholder.svg?height=80&width=120'
-    },
-    {
-      id: 2,
-      title: 'The Rise of AI-Assisted Coding',
-      author: 'Mike Johnson',
-      date: '2023-05-12',
-      readTime: '6 min read',
-      image: '/placeholder.svg?height=80&width=120'
-    },
-    {
-      id: 3,
-      title: 'Ethical Considerations in AI Development',
-      author: 'Sarah Lee',
-      date: '2023-05-14',
-      readTime: '5 min read',
-      image: '/placeholder.svg?height=80&width=120'
-    }
-  ])
+  
 
   const [isLiked, setIsLiked] = useState(false)
   const [isBookmarked, setIsBookmarked] = useState(false)
@@ -248,10 +211,11 @@ Join me on this exciting journey as we explore the cutting-edge advancements in 
 
   return (
     <>
-      <Navbar />
-      <div className='max-w-7xl mx-auto px-4 py-8 font-sans'>
+     <Navbar />
+      <div className='max-w-7xl  mx-auto  px-4 py-24 font-sans'>
         <div className='flex flex-col lg:flex-row gap-8'>
           {/* Left side - tempBlog Content */}
+          
           <div className='lg:w-2/3'>
             <h1 className='text-4xl font-bold mb-4'>{blog.title}</h1>
             <div className='flex items-center mb-6'>
